@@ -19,19 +19,20 @@ let sweat = new Image();
 sweat.src = "./src/sweat.png";
 
 //init hands positions
-let p1 = { x: 0, y: 0 };
+let p1 = { x: 100, y: 100 };
 let p2 = { x: width - 100, y: height - 100 };
 
 //test mouse move
 canvas.addEventListener("mousemove", (e) => {
   e.preventDefault();
-  p1 = {
+  p2 = {
     x: e.clientX * pixelRatio,
     y: e.clientY * pixelRatio,
   };
   render();
 });
 
+//touch move
 canvas.addEventListener("touchmove", (e) => {
   e.preventDefault();
   let touches = Array.from(e.touches);
@@ -59,7 +60,6 @@ function render() {
   drawButt();
   drawLeftHand();
   drawRightHand();
-
   makeSound();
 }
 
@@ -116,6 +116,30 @@ function drawSweat() {
   let butt_y = buttPos.y - butt_size / 2;
   ctx.drawImage(sweat, butt_x, butt_y, butt_size, butt_size);
 }
+
+let hasEnabledVoice = false;
+
+// code from https://codepen.io/toxic-johann/pen/JjGrPzg
+// trigger the sound once to register the speechsynthesis on mobile
+function enableAutoTTS() {
+  if (typeof window === "undefined") {
+    return;
+  }
+  const isiOS =
+    navigator.platform && /iPad|iPhone|iPod/.test(navigator.platform);
+  if (!isiOS) {
+    return;
+  }
+  const simulateSpeech = () => {
+    const lecture = new SpeechSynthesisUtterance("hello");
+    lecture.volume = 0;
+    speechSynthesis.speak(lecture);
+    document.removeEventListener("click", simulateSpeech);
+  };
+
+  document.addEventListener("click", simulateSpeech);
+}
+enableAutoTTS();
 
 function makeSound() {
   let handDist = Math.floor(distance(p1, p2));
