@@ -15,6 +15,8 @@ let right_hand = new Image();
 right_hand.src = "./src/right-hand.png";
 let butt = new Image();
 butt.src = "./src/butt.png";
+let sweat = new Image();
+sweat.src = "./src/sweat.png";
 
 //init hands positions
 let p1 = { x: 0, y: 0 };
@@ -103,6 +105,18 @@ function drawButt() {
   ctx.drawImage(butt, butt_x, butt_y, butt_size, butt_size);
 }
 
+function drawSweat() {
+  let pDiff = sub(p1, p2);
+  pDiff = scale(pDiff, 0.5);
+  let buttPos = add(p1, pDiff);
+
+  ctx.beginPath();
+  let butt_size = 350;
+  let butt_x = buttPos.x - butt_size / 2;
+  let butt_y = buttPos.y - butt_size / 2;
+  ctx.drawImage(sweat, butt_x, butt_y, butt_size, butt_size);
+}
+
 function makeSound() {
   let handDist = Math.floor(distance(p1, p2));
   //   console.log(handDist);
@@ -129,5 +143,6 @@ function makeSound() {
     setInterval(speak("almost there, daddy!", 5000));
   } else if (handDist > 0 && handDist <= 300) {
     setInterval(speak("spank me, daddy!", 5000));
+    drawSweat();
   }
 }
