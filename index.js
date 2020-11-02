@@ -17,8 +17,8 @@ let butt = new Image();
 butt.src = "./src/butt.png";
 
 //init hands positions
-let p1 = { x: 100, y: 100 };
-let p2 = { x: 150, y: 300 };
+let p1 = { x: 0, y: 0 };
+let p2 = { x: width - 100, y: height - 100 };
 
 //test mouse move
 canvas.addEventListener("mousemove", (e) => {
@@ -108,26 +108,26 @@ function makeSound() {
   //   console.log(handDist);
   const synth = window.speechSynthesis;
   const voices = speechSynthesis.getVoices();
-  //   console.log(voices);
-  let meiJia;
   const speak = (text) => {
     if (synth.speaking) {
       //   console.error("already talking");
       return;
     }
     let utterThis = new SpeechSynthesisUtterance(text);
-    for (let i = 0; i < voices.length; i++) {
-      if (voices[i].name == "Mei-Jia") {
-        meiJia = voices[i];
-      }
-    }
-    utterThis.voice = meiJia;
+    utterThis.voice = voices[0];
     synth.speak(utterThis);
   };
   if (handDist > height - 100 || handDist > width - 10) {
-    ctx.beginPath();
-    ctx.arc(width / 2, height / 2, 50, 0, Math.PI * 2);
-    ctx.fill();
-    setInterval(speak("come on! daddy ?", 5000));
+    // test if the boundary is ok
+    // ctx.beginPath();
+    // ctx.arc(width / 2, height / 2, 50, 0, Math.PI * 2);
+    // ctx.fill();
+    setInterval(speak("come on! daddy! you can do it!", 5000));
+  } else if (handDist > 450 && handDist < 800) {
+    setInterval(speak("come closer, daddy! ", 5000));
+  } else if (handDist > 350 && handDist <= 450) {
+    setInterval(speak("almost there, daddy!", 5000));
+  } else if (handDist > 0 && handDist <= 300) {
+    setInterval(speak("spank me, daddy!", 5000));
   }
 }
